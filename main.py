@@ -11,23 +11,23 @@ logging.basicConfig(level=logging.INFO)
 async def main():
     stock = await get_current()
     logger.info(f'NEW WHILE || LEN: {len(stock["recht"])}')
-    # print(f'NEW WHILE || LEN: {len(stock["recht"])}')
     office_list = []
     enter_list = []
     loss_list = []
     count = 0
+    for office_item in stock['office']:
+        if office_item['stock'] != 0:
+            office_list.append(office_item['item_id'])
     for item in stock['recht']:
         count += 1
         logger.info(f'Item # {count}')
         if item['item_art'][:4] != 'РСВ-':
             continue
         for office_item in stock['office']:
-            if item['item_id'] == office_item['item_id']:
+            if item['item_id'] in office_item['item_id']:
                 diff = item['stock']
                 res_tuple = (item['item_id'], diff)
                 loss_list.append(res_tuple)
-                office_list.append(item['item_id'])
-                break
         if item['item_id'] not in office_list:
             art_num = item['item_art'].split('-')[-1]
             recht_res = get_card_info(art_num)
@@ -36,7 +36,7 @@ async def main():
                 balance = recht_res[0]
                 balance = int(balance)
                 if item['stock'] == balance:
-                    continue
+                    pass
                 if item['stock'] < balance:
                     diff = balance - item['stock']
                     res_tuple = (item['item_id'], diff, price)
@@ -45,6 +45,7 @@ async def main():
                     diff = item['stock'] - balance
                     res_tuple = (item['item_id'], diff)
                     loss_list.append(res_tuple)
+    print(loss_list)
     if len(enter_list) > 0:
         await create_enter(enter_list)
     if len(loss_list) > 0:

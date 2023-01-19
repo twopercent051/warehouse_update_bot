@@ -20,7 +20,7 @@ def timeit(func):
     return wrapper
 
 
-@timeit
+# @timeit
 def get_card_info(item_art):
     try:
         url = f'https://www.oreht.ru/modules.php?name=orehtPriceLS&op=ShowInfo&code={item_art}'

@@ -99,6 +99,7 @@ async def get_current():
             item_id = item['meta']['href'].split('/')[-1].split('?')[0]
             for stock in item['stockByStore']:
                 if stock['meta']['href'] == office_stock['meta']['href'] and stock['stock'] > 0:
+                    # print(item_id, stock['stock'])
                     for prod in product_list:
                         if item_id == prod[1]:
                             item_art = prod[0]
@@ -163,6 +164,7 @@ async def create_loss(loss_list):
     organization_meta = await get_organization()
     positions_list = []
     for item in loss_list:
+        print(f'Позиция {item[0]} удалена')
         item_dict = {
             "quantity": item[1],
             "assortment": {
@@ -181,5 +183,7 @@ async def create_loss(loss_list):
         'positions': positions_list
     }
     req_data = json.dumps(r_data)
+    print(req_data)
     async with aiohttp.ClientSession(headers={'Authorization': token, 'Content-Type': 'application/json'}) as session:
         await session.post(f'https://online.moysklad.ru/api/remap/1.2/entity/loss', data=req_data)
+    print(f'Запрос на удаление отправлен')
