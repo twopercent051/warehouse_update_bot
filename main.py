@@ -1,20 +1,24 @@
 import time
+import logging
 
 from recht_parser import get_card_info
 from ms_requester import get_current, create_enter, create_loss
 import asyncio
 
-
+logger = logging.getLogger(__name__)
+console_out = logging.StreamHandler()
+logging.basicConfig(level=logging.INFO)
 async def main():
     stock = await get_current()
-    print(f'NEW WHILE || LEN: {len(stock["recht"])}')
+    logger.info(f'NEW WHILE || LEN: {len(stock["recht"])}')
+    # print(f'NEW WHILE || LEN: {len(stock["recht"])}')
     office_list = []
     enter_list = []
     loss_list = []
     count = 0
     for item in stock['recht']:
         count += 1
-        print(f'Item # {count}')
+        logger.info(f'Item # {count}')
         if item['item_art'][:4] != 'РСВ-':
             continue
         for office_item in stock['office']:
@@ -45,7 +49,7 @@ async def main():
         await create_enter(enter_list)
     if len(loss_list) > 0:
         await create_loss(loss_list)
-    print('DONE')
+    logger.info('DONE')
     time.sleep(2)
 
 
@@ -55,4 +59,4 @@ if __name__ == '__main__':
             asyncio.run(main())
         except Exception as ex:
             time.sleep(15)
-            print(f"Running again after {ex}!")
+            logger.info(f"Running again after {ex}!")
