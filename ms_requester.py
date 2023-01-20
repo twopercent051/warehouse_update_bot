@@ -107,12 +107,12 @@ async def get_current():
                         if item_id == prod[1]:
                             item_art = prod[0]
                             break
-                        res_dict = {
-                            'item_id': item_id,
-                            'item_art': item_art,
-                            'stock': int(stock['stock']),
-                            'reserve': int(stock['reserve'])
-                        }
+                    res_dict = {
+                        'item_id': item_id,
+                        'item_art': item_art,
+                        'stock': int(stock['stock']),
+                        'reserve': int(stock['reserve'])
+                    }
                     office_list.append(res_dict)
                 if stock['meta']['href'] == recht_stock['meta']['href']:
                     for prod in product_list:
@@ -132,11 +132,9 @@ async def get_current():
             item_art = prod[0]
             res_dict = {'item_id': prod[1], 'item_art': item_art, 'stock': 0, 'reserve': 0}
             recht_list.append(res_dict)
-        result = {'office': office_list, 'recht': recht_list}
-        print(result)
-        return result
+    result = {'office': office_list, 'recht': recht_list}
+    return result
 
-asyncio.run(get_current())
 
 async def create_enter(enter_list):
     organization_meta = await get_organization()

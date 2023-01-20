@@ -23,6 +23,7 @@ async def main():
         for office_item in stock['office']:
             if item['item_id'] in office_item['item_id']:
                 diff = item['stock']
+                logger.info(f'Ненулевой офис. Списание {diff} шт || Артикул {item["item_art"]}')
                 res_tuple = (item['item_id'], diff)
                 loss_list.append(res_tuple)
         if item['item_id'] not in office_list:
@@ -43,8 +44,6 @@ async def main():
                     diff = item['stock'] - balance
                     res_tuple = (item['item_id'], diff)
                     loss_list.append(res_tuple)
-        logger.info(f'Приход {enter_list}')
-        logger.info(f'Списание {loss_list}')
         if count % 100 == 0 or count == len(stock['recht']):
             if len(enter_list) > 0:
                 await create_enter(enter_list)
