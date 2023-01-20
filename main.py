@@ -32,6 +32,7 @@ async def main():
             if recht_res and recht_res[0].isdigit():
                 balance = recht_res[0]
                 balance = int(balance)
+                logger.info(f'Баланс {balance} || Склад {item["stock"]} || Артикул {item["item_art"]}')
                 if item['stock'] == balance:
                     pass
                 if item['stock'] < balance:
@@ -42,6 +43,8 @@ async def main():
                     diff = item['stock'] - balance
                     res_tuple = (item['item_id'], diff)
                     loss_list.append(res_tuple)
+        logger.info(f'Приход {enter_list}')
+        logger.info(f'Списание {loss_list}')
         if count % 100 == 0 or count == len(stock['recht']):
             if len(enter_list) > 0:
                 await create_enter(enter_list)
