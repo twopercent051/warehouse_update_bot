@@ -67,7 +67,7 @@ async def get_products():
             item_id = item['id']
             res_tuple = (item_art, item_id)
             res_list.append(res_tuple)
-    return res_list
+    return (res_list, size)
 
 
 async def get_office_current():
@@ -86,14 +86,19 @@ async def get_office_current():
 
 
 async def get_current():
-    async with aiohttp.ClientSession(headers={'Authorization': token}) as session:
-        async with session.get(f'https://online.moysklad.ru/api/remap/1.2/report/stock/bystore') as resp:
-            response = await resp.read()
+    products_tuple = await get_products()
+    product_list = products_tuple[0]
+    size = products_tuple[1]
+    pages = math.ceil(size / 1000)
+    office_list = []
+    recht_list = []
+    recht_item_list = []
+    for i in range(pages):
+        offset = i * 1000
+        async with aiohttp.ClientSession(headers={'Authorization': token}) as session:
+            async with session.get(f'https://online.moysklad.ru/api/remap/1.2/report/stock/bystore?offset={offset}') as resp:
+                response = await resp.read()
         data = json.loads(response)['rows']
-        product_list = await get_products()
-        office_list = []
-        recht_list = []
-        recht_item_list = []
         for item in data:
             item_id = item['meta']['href'].split('/')[-1].split('?')[0]
             for stock in item['stockByStore']:
@@ -102,12 +107,12 @@ async def get_current():
                         if item_id == prod[1]:
                             item_art = prod[0]
                             break
-                    res_dict = {
-                        'item_id': item_id,
-                        'item_art': item_art,
-                        'stock': int(stock['stock']),
-                        'reserve': int(stock['reserve'])
-                    }
+                        res_dict = {
+                            'item_id': item_id,
+                            'item_art': item_art,
+                            'stock': int(stock['stock']),
+                            'reserve': int(stock['reserve'])
+                        }
                     office_list.append(res_dict)
                 if stock['meta']['href'] == recht_stock['meta']['href']:
                     for prod in product_list:
@@ -127,9 +132,11 @@ async def get_current():
             item_art = prod[0]
             res_dict = {'item_id': prod[1], 'item_art': item_art, 'stock': 0, 'reserve': 0}
             recht_list.append(res_dict)
-    result = {'office': office_list, 'recht': recht_list}
-    return result
+        result = {'office': office_list, 'recht': recht_list}
+        print(result)
+        return result
 
+asyncio.run(get_current())
 
 async def create_enter(enter_list):
     organization_meta = await get_organization()
