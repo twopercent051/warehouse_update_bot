@@ -2,7 +2,7 @@ import asyncio
 import math
 import aiohttp
 import json
-from config import load_config
+from config import load_config, logger
 
 config = load_config(".env")
 token = config.g_conf.ms_token
@@ -38,8 +38,6 @@ async def get_stock():
     # return json.dumps(meta)
     return meta
 
-
-asyncio.run(get_stock())
 
 async def get_organization():
     async with aiohttp.ClientSession(headers={'Authorization': token}) as session:
@@ -77,7 +75,6 @@ async def get_office_current():
         async with session.get(f'https://online.moysklad.ru/api/remap/1.2/report/stock/bystore') as resp:
             response = await resp.read()
         data = json.loads(response)['rows']
-        print(data)
         office_list = []
         for item in data:
             item_id = item['meta']['href'].split('/')[-1].split('?')[0]
@@ -101,7 +98,6 @@ async def get_current():
             item_id = item['meta']['href'].split('/')[-1].split('?')[0]
             for stock in item['stockByStore']:
                 if stock['meta']['href'] == office_stock['meta']['href'] and stock['stock'] > 0:
-                    # print(item_id, stock['stock'])
                     for prod in product_list:
                         if item_id == prod[1]:
                             item_art = prod[0]
@@ -160,13 +156,13 @@ async def create_enter(enter_list):
     req_data = json.dumps(r_data)
     async with aiohttp.ClientSession(headers={'Authorization': token, 'Content-Type': 'application/json'}) as session:
         await session.post(f'https://online.moysklad.ru/api/remap/1.2/entity/enter', data=req_data)
+        logger.info(f'Оприходованно {len(enter_list)} позиций')
 
 
 async def create_loss(loss_list):
     organization_meta = await get_organization()
     positions_list = []
     for item in loss_list:
-        print(f'Позиция {item[0]} удалена')
         item_dict = {
             "quantity": item[1],
             "assortment": {
@@ -185,7 +181,7 @@ async def create_loss(loss_list):
         'positions': positions_list
     }
     req_data = json.dumps(r_data)
-    print(req_data)
     async with aiohttp.ClientSession(headers={'Authorization': token, 'Content-Type': 'application/json'}) as session:
         await session.post(f'https://online.moysklad.ru/api/remap/1.2/entity/loss', data=req_data)
-    print(f'Запрос на удаление отправлен')
+        logger.info(f'Списано {len(loss_list)} позиций')
+

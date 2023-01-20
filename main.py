@@ -1,13 +1,10 @@
 import time
-import logging
-
 from recht_parser import get_card_info
 from ms_requester import get_current, create_enter, create_loss
 import asyncio
+from config import logger
 
-logger = logging.getLogger(__name__)
-console_out = logging.StreamHandler()
-logging.basicConfig(level=logging.INFO)
+
 async def main():
     stock = await get_current()
     logger.info(f'NEW WHILE || LEN: {len(stock["recht"])}')
@@ -45,11 +42,13 @@ async def main():
                     diff = item['stock'] - balance
                     res_tuple = (item['item_id'], diff)
                     loss_list.append(res_tuple)
-    print(loss_list)
-    if len(enter_list) > 0:
-        await create_enter(enter_list)
-    if len(loss_list) > 0:
-        await create_loss(loss_list)
+        if count % 100 == 0 or count == len(stock['recht']):
+            if len(enter_list) > 0:
+                await create_enter(enter_list)
+            if len(loss_list) > 0:
+                await create_loss(loss_list)
+            office_list = []
+            enter_list = []
     logger.info('DONE')
     time.sleep(2)
 

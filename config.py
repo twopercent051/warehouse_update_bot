@@ -1,6 +1,11 @@
 from dataclasses import dataclass
-
 from environs import Env
+import logging
+
+
+logger = logging.getLogger(__name__)
+console_out = logging.StreamHandler()
+logging.basicConfig(level=logging.INFO)
 
 @dataclass
 class GConfig:

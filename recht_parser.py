@@ -1,9 +1,7 @@
-from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
 import requests
-import time
 from datetime import datetime
-from config import load_config
+from config import load_config, logger
 
 config = load_config(".env")
 
@@ -15,7 +13,7 @@ def timeit(func):
     def wrapper(*args, **kwargs):
         start = datetime.now()
         result = func(*args, **kwargs)
-        print(datetime.now() - start)
+        logger.info(datetime.now() - start)
         return result
     return wrapper
 
