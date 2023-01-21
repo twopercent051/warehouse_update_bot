@@ -49,7 +49,7 @@ async def main():
                 await create_enter(enter_list)
             if len(loss_list) > 0:
                 await create_loss(loss_list)
-            office_list = []
+            loss_list = []
             enter_list = []
     logger.info('DONE')
     time.sleep(2)
