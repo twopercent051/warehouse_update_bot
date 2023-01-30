@@ -53,7 +53,7 @@ async def main():
             loss_list = []
             enter_list = []
             ft = time.time()
-            print(ft - st)
+            logger.info(ft - st)
     logger.info('DONE')
     time.sleep(2)
 
