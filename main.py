@@ -12,6 +12,7 @@ async def main():
     enter_list = []
     loss_list = []
     count = 0
+    st = time.time()
     for office_item in stock['office']:
         if office_item['stock'] != 0:
             office_list.append(office_item['item_id'])
@@ -28,12 +29,12 @@ async def main():
                 loss_list.append(res_tuple)
         if item['item_id'] not in office_list:
             art_num = item['item_art'].split('-')[-1]
-            recht_res = get_card_info(art_num)
-            price = recht_res[1] * 100
+            recht_res = await get_card_info(art_num)
             if recht_res and recht_res[0].isdigit():
+                price = recht_res[1] * 100
                 balance = recht_res[0]
                 balance = int(balance)
-                logger.info(f'Баланс {balance} || Склад {item["stock"]} || Артикул {item["item_art"]}')
+                # logger.info(f'Баланс {balance} || Склад {item["stock"]} || Артикул {item["item_art"]}')
                 if item['stock'] == balance:
                     pass
                 if item['stock'] < balance:
@@ -51,6 +52,8 @@ async def main():
                 await create_loss(loss_list)
             loss_list = []
             enter_list = []
+            ft = time.time()
+            print(ft - st)
     logger.info('DONE')
     time.sleep(2)
 
