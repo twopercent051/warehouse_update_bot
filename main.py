@@ -16,7 +16,7 @@ async def main():
     for office_item in stock['office']:
         if office_item['stock'] != 0:
             office_list.append(office_item['item_id'])
-    for item in stock['recht']:
+    for item in stock['recht'][2655:]:
         count += 1
         logger.info(f'Item # {count}')
         if item['item_art'][:4] != 'РСВ-':
@@ -34,8 +34,7 @@ async def main():
                 price = recht_res[1] * 100
                 balance = recht_res[0]
                 balance = int(balance)
-                if art_num == '351937':
-                    logger.info(f'Баланс {balance} || Склад {item["stock"]} || Артикул {item["item_art"]}')
+                logger.info(f'Баланс {balance} || Склад {item["stock"]} || Артикул {item["item_art"]}')
                 if item['stock'] == balance:
                     pass
                 if item['stock'] < balance:
@@ -46,6 +45,11 @@ async def main():
                     diff = item['stock'] - balance
                     res_tuple = (item['item_id'], diff)
                     loss_list.append(res_tuple)
+            else:
+                diff = item['stock']
+                logger.info(f'Битая ссылка. Списание {diff} шт || Артикул {item["item_art"]}')
+                res_tuple = (item['item_id'], diff)
+                loss_list.append(res_tuple)
         if count % 100 == 0 or count == len(stock['recht']):
             if len(enter_list) > 0:
                 await create_enter(enter_list)
@@ -59,10 +63,12 @@ async def main():
     time.sleep(2)
 
 
-if __name__ == '__main__':
-    while True:
-        try:
-            asyncio.run(main())
-        except Exception as ex:
-            time.sleep(15)
-            logger.info(f"Running again after {ex}!")
+asyncio.run(main())
+
+# if __name__ == '__main__':
+#     while True:
+#         try:
+#             asyncio.run(main())
+#         except Exception as ex:
+#             time.sleep(15)
+#             logger.info(f"Running again after {ex}!")
