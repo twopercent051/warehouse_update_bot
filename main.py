@@ -34,7 +34,8 @@ async def main():
                 price = recht_res[1] * 100
                 balance = recht_res[0]
                 balance = int(balance)
-                logger.info(f'Баланс {balance} || Склад {item["stock"]} || Артикул {item["item_art"]}')
+                if art_num == '351937':
+                    logger.info(f'Баланс {balance} || Склад {item["stock"]} || Артикул {item["item_art"]}')
                 if item['stock'] == balance:
                     pass
                 if item['stock'] < balance:
