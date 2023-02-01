@@ -16,7 +16,7 @@ async def main():
     for office_item in stock['office']:
         if office_item['stock'] != 0:
             office_list.append(office_item['item_id'])
-    for item in stock['recht'][2655:]:
+    for item in stock['recht']:
         count += 1
         logger.info(f'Item # {count}')
         if item['item_art'][:4] != 'РСВ-':
