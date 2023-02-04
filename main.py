@@ -16,7 +16,7 @@ async def main():
     for office_item in stock['office']:
         if office_item['stock'] != 0:
             office_list.append(office_item['item_id'])
-    for item in stock['recht']:
+    for item in stock['recht'][3600:]:
         count += 1
         logger.info(f'Item # {count}')
         if item['item_art'][:4] != 'РСВ-':
@@ -63,12 +63,10 @@ async def main():
     time.sleep(2)
 
 
-asyncio.run(main())
-
-# if __name__ == '__main__':
-#     while True:
-#         try:
-#             asyncio.run(main())
-#         except Exception as ex:
-#             time.sleep(15)
-#             logger.info(f"Running again after {ex}!")
+if __name__ == '__main__':
+    while True:
+        try:
+            asyncio.run(main())
+        except Exception as ex:
+            time.sleep(15)
+            logger.info(f"Running again after {ex}!")
