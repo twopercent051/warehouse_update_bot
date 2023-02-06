@@ -180,7 +180,6 @@ async def create_loss(loss_list):
             }
         }
         positions_list.append(item_dict)
-    print(positions_list)
     r_data = {
         'organization': organization_meta,
         'store': recht_stock,
