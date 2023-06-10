@@ -3,11 +3,13 @@ from recht_parser import get_card_info
 from ms_requester import get_current, create_enter, create_loss
 import asyncio
 from config import logger
+from telegram import message
 
 
 async def main():
     stock = await get_current()
     logger.info(f'NEW WHILE || LEN: {len(stock["recht"])}')
+    await message(f"Начало цикла. В списке {len(stock['recht'])} позиций")
     office_list = []
     enter_list = []
     loss_list = []
@@ -26,6 +28,7 @@ async def main():
                 diff = item['stock']
                 if diff > 0:
                     logger.info(f'Ненулевой офис. Списание {diff} шт || Артикул {item["item_art"]}')
+                    await message(f'Ненулевой офис. Списание {diff} шт || Артикул {item["item_art"]}')
                     res_tuple = (item['item_id'], diff)
                     loss_list.append(res_tuple)
         if item['item_id'] not in office_list:
@@ -42,16 +45,19 @@ async def main():
                     diff = balance - item['stock']
                     res_tuple = (item['item_id'], diff, price)
                     logger.info(f'Расхождение склада. Оприходование {diff} шт || Артикул {item["item_art"]}')
+                    await message(f'Расхождение склада. Оприходование {diff} шт || Артикул {item["item_art"]}')
                     enter_list.append(res_tuple)
                 if item['stock'] > balance:
                     diff = item['stock'] - balance
                     res_tuple = (item['item_id'], diff)
                     logger.info(f'Расхождение склада. Списание {diff} шт || Артикул {item["item_art"]}')
+                    await message(f'Расхождение склада. Списание {diff} шт || Артикул {item["item_art"]}')
                     loss_list.append(res_tuple)
             else:
                 diff = item['stock']
                 if diff > 0:
                     logger.info(f'Битая ссылка. Списание {diff} шт || Артикул {item["item_art"]}')
+                    await message(f'Битая ссылка. Списание {diff} шт || Артикул {item["item_art"]}')
                     res_tuple = (item['item_id'], diff)
                     loss_list.append(res_tuple)
         if count % 100 == 0 or count == len(stock['recht']):

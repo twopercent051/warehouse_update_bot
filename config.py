@@ -14,6 +14,10 @@ class GConfig:
     recht_login: str
     recht_psw: str
 
+    tlg_token: str
+    tlg_admin: str
+
+
 @dataclass
 class Config:
     g_conf: GConfig
@@ -28,6 +32,8 @@ def load_config(path: str = None):
             ozon_token=env.str('OZON_TOKEN'),
             ms_token=env.str('MS_TOKEN'),
             recht_login=env.str('RECHT_LOGIN'),
-            recht_psw=env.str('RECHT_PSW')
+            recht_psw=env.str('RECHT_PSW'),
+            tlg_token=env.str("TLG_TOKEN"),
+            tlg_admin=env.str("TLG_ADMIN"),
         )
     )
