@@ -17,7 +17,6 @@ async def message(text: str):
         "disable_web_page_preview": "true"
     }
     async with aiohttp.ClientSession() as session:
-        async with session.get(f'https://api.telegram.org/bot{token}/sendMessage', params=params) as resp:
-            print(resp)
+        await session.get(f'https://api.telegram.org/bot{token}/sendMessage', params=params)
 
 

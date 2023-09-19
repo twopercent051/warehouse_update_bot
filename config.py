@@ -13,6 +13,7 @@ class GConfig:
     ms_token: str
     recht_login: str
     recht_psw: str
+    unas_url: str
 
     tlg_token: str
     tlg_admin: str
@@ -35,5 +36,6 @@ def load_config(path: str = None):
             recht_psw=env.str('RECHT_PSW'),
             tlg_token=env.str("TLG_TOKEN"),
             tlg_admin=env.str("TLG_ADMIN"),
+            unas_url=env.str("UNAS_URL"),
         )
     )
