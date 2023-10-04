@@ -65,13 +65,22 @@ class MSApi:
         #         'uuidHref': 'https://online.moysklad.ru/app/#warehouse/edit?id=c34ca5a9-5660-11ee-0a80-05a10001f45f'
         #     }}
 
+        # self.unas_stock = {
+        #     'meta': {
+        #         'href': 'https://api.moysklad.ru/api/remap/1.2/entity/store/d3ba8b81-5660-11ee-0a80-05a10001f4e2',
+        #         'metadataHref': 'https://api.moysklad.ru/api/remap/1.2/entity/store/metadata',
+        #         'type': 'store',
+        #         'mediaType': 'application/json',
+        #         'uuidHref': 'https://online.moysklad.ru/app/#warehouse/edit?id=d3ba8b81-5660-11ee-0a80-05a10001f4e2'
+        #     }}
+
         self.unas_stock = {
             'meta': {
-                'href': 'https://api.moysklad.ru/api/remap/1.2/entity/store/d3ba8b81-5660-11ee-0a80-05a10001f4e2',
+                'href': 'https://api.moysklad.ru/api/remap/1.2/entity/store/f7d8c159-5d2c-11ee-0a80-02e6000f5174',
                 'metadataHref': 'https://api.moysklad.ru/api/remap/1.2/entity/store/metadata',
                 'type': 'store',
                 'mediaType': 'application/json',
-                'uuidHref': 'https://online.moysklad.ru/app/#warehouse/edit?id=d3ba8b81-5660-11ee-0a80-05a10001f4e2'
+                'uuidHref': 'https://online.moysklad.ru/app/#warehouse/edit?id=f7d8c159-5d2c-11ee-0a80-02e6000f5174'
             }}
 
     @staticmethod
