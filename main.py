@@ -56,13 +56,13 @@ class Main:
                         await message(f'Битая ссылка. Списание {diff} шт || Артикул {item["item_art"]}')
                         res_tuple = (item['item_id'], diff)
                         loss_list.append(res_tuple)
-            if count % 100 == 0 or count == len(stock_items):
-                if len(enter_list) > 0:
-                    await ms_api.stock_operation(type_operation="enter", stock_type=stock_type, item_list=enter_list)
-                if len(loss_list) > 0:
-                    await ms_api.stock_operation(type_operation="loss", stock_type=stock_type, item_list=loss_list)
-                loss_list = []
-                enter_list = []
+            # if count % 100 == 0 or count == len(stock_items):
+            if len(enter_list) == 10 or count == len(stock_items):
+                await ms_api.stock_operation(type_operation="enter", stock_type=stock_type, item_list=enter_list)
+            if len(loss_list) == 10 or count == len(stock_items):
+                await ms_api.stock_operation(type_operation="loss", stock_type=stock_type, item_list=loss_list)
+            loss_list = []
+            enter_list = []
 
     @classmethod
     async def main(cls):
