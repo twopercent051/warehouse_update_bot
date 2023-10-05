@@ -22,6 +22,7 @@ class Main:
         office_list = [i["item_id"] for i in office_items]
         for item in stock_items:
             count += 1
+            logger.info(f"Art {item['item_id']} || {item['stock']} шт")
             for office_item in office_items:
                 if item['item_id'] in office_item['item_id']:
                     diff = item['stock']
