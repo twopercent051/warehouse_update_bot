@@ -19,10 +19,10 @@ class Main:
         enter_list = []
         loss_list = []
         count = 0
-        office_list = [i["item_art"] for i in office_items]
+        office_list = [i["item_id"] for i in office_items]
         for item in stock_items:
             count += 1
-            logger.info(f"Art {item['item_id']} || {item['stock']} шт")
+            logger.info(f"{count} Art {item['item_art']} || {item['stock']} шт")
             for office_item in office_items:
                 if item['item_id'] in office_item['item_id']:
                     diff = item['stock']
